@@ -1,10 +1,10 @@
 server:
-  port: ${PORT:8000}
+  port: ${PORT:8100}
 spring:
   application:
-    name: user-api
+    name: payroll-api
   datasource:
-    url: jdbc:h2:mem:user-api
+    url: jdbc:h2:mem:payroll-api
     username: sa
     password:
   h2:
