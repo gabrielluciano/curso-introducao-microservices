@@ -1,0 +1,55 @@
+services:
+  eureka-server:
+    image: gabrielluciano/hr-eureka-server:1.0.0
+    environment:
+      - PORT=8761
+    ports:
+      - 8761:8761
+    networks:
+      - hr-system
+
+  api-gateway:
+    image: gabrielluciano/hr-api-gateway:1.0.0
+    depends_on:
+      - eureka-server
+    environment:
+      - PORT=8765
+      - EUREKA_URL=http://eureka-server:8761/eureka/
+    ports:
+      - 8765:8765
+    networks:
+      - hr-system
+
+  user-api-1: &user-api
+    image: gabrielluciano/hr-user-api:1.0.0
+    depends_on:
+      - eureka-server
+      - api-gateway
+    environment:
+      - PORT=8000
+      - EUREKA_URL=http://eureka-server:8761/eureka/
+    networks:
+      - hr-system
+
+  user-api-2:
+    <<: *user-api
+
+  payroll-api-1: &payroll-api
+    image: gabrielluciano/hr-payroll-api:1.0.0
+    depends_on:
+      - eureka-server
+      - api-gateway
+      - user-api-1
+      - user-api-2
+    environment:
+      - PORT=8100
+      - EUREKA_URL=http://eureka-server:8761/eureka/
+    networks:
+      - hr-system
+
+  payroll-api-2:
+    <<: *payroll-api
+
+networks:
+  hr-system:
+    driver: bridge
