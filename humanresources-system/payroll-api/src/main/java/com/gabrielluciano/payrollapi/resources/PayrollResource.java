@@ -19,7 +19,7 @@ public class PayrollResource {
 
     @PostMapping("/{workerId}")
     public ResponseEntity<Payroll> getPayment(@PathVariable Long workerId, @RequestBody Payroll payment) {
-        log.info("PAYROLL_SERVICE ::: Post request on " + env.getProperty("local.server.port") + " port");
+        log.info("PAYROLL_SERVICE ::: Post request on {} port", env.getProperty("local.server.port"));
         return ResponseEntity.ok(service.getPayment(workerId, payment));
     }
 }
